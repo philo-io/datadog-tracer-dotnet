@@ -24,7 +24,7 @@ jobs:
       CR_UID: ${{ github.repository_owner }}
       CR_PWD: ${{ secrets.GITHUB_TOKEN }}
       CR_REG: ghcr.io
-      IMAGE_NAME: serverless-datadog-dotnet
+      IMAGE_NAME: ${{ github.repository }}
       DD_TRACE_VERSION: ${{needs.gather-dependencies.outputs.dd-trace-version}}
     runs-on: ubuntu-latest
     
@@ -54,5 +54,5 @@ jobs:
             DD_TRACE_VERSION=${{ env.DD_TRACE_VERSION }}
           push: true
           tags: |
-            ${{ env.CR_REG }}/${{ env.CR_UID }}/${{ env.IMAGE_NAME }}:LATEST
-            ${{ env.CR_REG }}/${{ env.CR_UID }}/${{ env.IMAGE_NAME }}:${{ env.DD_TRACE_VERSION }}
+            ${{ env.CR_REG }}/${{ env.IMAGE_NAME }}:LATEST
+            ${{ env.CR_REG }}/${{ env.IMAGE_NAME }}:${{ env.DD_TRACE_VERSION }}
