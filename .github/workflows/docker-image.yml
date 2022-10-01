@@ -25,7 +25,6 @@ jobs:
       CR_PWD: ${{ secrets.GITHUB_TOKEN }}
       CR_REG: ghcr.io
       IMAGE_NAME: serverless-datadog-dotnet
-      IMAGE_TAG: LATEST
       DD_TRACE_VERSION: ${{needs.gather-dependencies.outputs.dd-trace-version}}
     runs-on: ubuntu-latest
     
@@ -51,5 +50,9 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
+          build-args: |
+            DD_TRACE_VERSION=${{ env.DD_TRACE_VERSION }}
           push: true
-          tags: ${{ env.CR_REG }}/${{ env.CR_UID }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          tags: |
+            ${{ env.CR_REG }}/${{ env.CR_UID }}/${{ env.IMAGE_NAME }}:LATEST
+            ${{ env.CR_REG }}/${{ env.CR_UID }}/${{ env.IMAGE_NAME }}:${{ env.DD_TRACE_VERSION }}
