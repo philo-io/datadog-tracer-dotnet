@@ -6,6 +6,14 @@ on:
       - 'main'
 
 jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout Repository'
+        uses: actions/checkout@v3
+      - name: hey
+        run: ls
+      - run: echo $(cat Project.csproj | grep Datadog.Trace | sed 's/.*Version="\([^"]*\).*/\1/i')
   docker:
     env:
       # CR_UID: ${{ secrets.DOCKERHUB_USERNAME }}
