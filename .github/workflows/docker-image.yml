@@ -9,7 +9,7 @@ jobs:
   gather-dependencies:
     runs-on: ubuntu-latest
     outputs:
-      dd-trace-version: ${{ steps.step1.dd-trace.version }}
+      dd-trace-version: ${{ steps.dd-trace.outputs.version }}
     steps:
       - name: 'Checkout Repository'
         uses: actions/checkout@v3
