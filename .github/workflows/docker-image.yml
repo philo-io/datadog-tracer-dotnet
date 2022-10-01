@@ -10,8 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       dd-trace-version: ${{ steps.step1.dd-trace.version }}
-      output2: ${{ steps.step2.outputs.test }}
     steps:
+      - name: 'Checkout Repository'
+        uses: actions/checkout@v3
       - name: Datadog.Trace version
         id: dd-trace
         run: echo "::set-output name=version::$(cat Project.csproj | grep Datadog.Trace | sed 's/.*Version="\([^"]*\).*/\1/i')"
