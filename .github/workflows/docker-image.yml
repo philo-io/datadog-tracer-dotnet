@@ -6,15 +6,17 @@ on:
       - 'main'
 
 jobs:
-  dependency-review:
+  gather-dependencies:
     runs-on: ubuntu-latest
+    outputs:
+      dd-trace-version: ${{ steps.step1.dd-trace.version }}
+      output2: ${{ steps.step2.outputs.test }}
     steps:
-      - name: 'Checkout Repository'
-        uses: actions/checkout@v3
-      - name: hey
-        run: ls
-      - run: echo $(cat Project.csproj | grep Datadog.Trace | sed 's/.*Version="\([^"]*\).*/\1/i')
-  docker:
+      - name: Datadog.Trace version
+        id: dd-trace
+        run: echo "::set-output name=version::$(cat Project.csproj | grep Datadog.Trace | sed 's/.*Version="\([^"]*\).*/\1/i')"
+  build-image:
+    needs: gather-dependencies
     env:
       # CR_UID: ${{ secrets.DOCKERHUB_USERNAME }}
       # CR_PWD: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -23,16 +25,15 @@ jobs:
       CR_REG: ghcr.io
       IMAGE_NAME: serverless-datadog-dotnet
       IMAGE_TAG: LATEST
+      DD_TRACE_VERSION: ${{needs.gather-dependencies.outputs.dd-trace-version}}
     runs-on: ubuntu-latest
     
     steps:
-      - name: hey
-        run: |
-          ls && echo $(cat Project.csproj | grep Datadog.Trace | sed 's/.*Version="\([^"]*\).*/\1/i')
-      - name: Dependabot metadata
-        if: ${{ github.actor == 'dependabot[bot]' }}
-        id: metadata
-        uses: dependabot/fetch-metadata@v1.1.1
+      - run: echo ${{ env.DD_TRACE_VERSION }}
+#       - name: Dependabot metadata
+#         if: ${{ github.actor == 'dependabot[bot]' }}
+#         id: metadata
+#         uses: dependabot/fetch-metadata@v1.1.1
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
         
