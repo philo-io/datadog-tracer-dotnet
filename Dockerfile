@@ -1,5 +1,7 @@
 FROM alpine:latest AS datadog-tracer
 ARG DD_TRACE_VERSION
+LABEL org.opencontainers.image.description dd-trace-dotnet v${DD_TRACE_VERSION}
+
 RUN apk add tar wget gzip
 RUN mkdir /opt/datadog
 COPY Project.csproj .
