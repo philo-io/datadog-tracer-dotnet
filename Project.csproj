@@ -1,5 +1,5 @@
 <Project>
   <ItemGroup>
-    <PackageReference Include="Datadog.Trace" Version="2.40.0" />
+    <PackageReference Include="Datadog.Trace" Version="2.41.0" />
   </ItemGroup>
 </Project>
